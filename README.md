@@ -60,17 +60,11 @@ Puedes desplegar esta aplicación en cualquier servidor web estático:
 2. Asegúrate de mantener la estructura de carpetas
 3. No se requiere ninguna configuración adicional del servidor
 
-Algunos servicios de alojamiento gratuitos donde puedes desplegar esta aplicación:
-
-- GitHub Pages
-- Netlify
-- Vercel
-- Firebase Hosting
+Puedes probar la aplicación en línea en [GitHub Pages](https://jgamboaa.github.io/password_generator/).
 
 ## Seguridad
 
 Este generador utiliza la API Web Crypto (cuando está disponible) para generar números aleatorios criptográficamente seguros. Como fallback, utiliza `Math.random()` si la API Crypto no está disponible.
-
 
 ---
 
