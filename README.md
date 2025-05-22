@@ -38,7 +38,7 @@ password_generator/
 No requiere instalación especial. Solo necesitas clonar o descargar este repositorio:
 
 ```bash
-git clone [URL del repositorio]
+git clone https://github.com/Jgamboaa/password_generator.git
 cd password-generator
 ```
 
