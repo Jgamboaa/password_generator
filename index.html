@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generador de Contraseñas Seguras</title>
+    <title>Multi Tools</title>
     <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -14,9 +14,15 @@
   </head>
   <body>
     <div class="container py-5">
-      <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-          <div class="card shadow">
+      <div class="text-center mb-5">
+        <h1 class="display-4 text-primary">Multi Tools</h1>
+        <p class="lead text-muted">Generador de contraseñas y códigos QR</p>
+      </div>
+
+      <div class="row justify-content-center g-4">
+        <!-- Card del Generador de Contraseñas -->
+        <div class="col-md-6 col-lg-5">
+          <div class="card shadow h-100">
             <div class="card-header bg-primary text-white">
               <h2 class="card-title h4 mb-0 text-center">
                 Generador de Contraseñas Seguras
@@ -131,8 +137,71 @@
             </div>
           </div>
         </div>
+
+        <!-- Card del Generador de QR -->
+        <div class="col-md-6 col-lg-5">
+          <div class="card shadow h-100">
+            <div class="card-header bg-success text-white">
+              <h2 class="card-title h4 mb-0 text-center">
+                Generador de Códigos QR
+              </h2>
+            </div>
+            <div class="card-body">
+              <form id="qrGeneratorForm">
+                <div class="mb-3">
+                  <label for="qrText" class="form-label">Texto o URL:</label>
+                  <textarea
+                    class="form-control"
+                    id="qrText"
+                    rows="3"
+                    placeholder="Ingresa el texto o URL para generar el código QR"
+                    aria-describedby="qrTextHelp"
+                  ></textarea>
+                  <div id="qrTextHelp" class="form-text">
+                    Ingresa cualquier texto, URL, email, etc.
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="qrSize" class="form-label">
+                    Tamaño: <span id="qrSizeValue">256</span>px
+                  </label>
+                  <input
+                    type="range"
+                    class="form-range"
+                    min="128"
+                    max="512"
+                    step="32"
+                    value="256"
+                    id="qrSize"
+                  />
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    id="generateQrButton"
+                  >
+                    Generar Código QR
+                  </button>
+                </div>
+              </form>
+
+              <div id="qrResult" class="text-center" style="display: none">
+                <div id="qrcode" class="mb-3 d-inline-block border p-2"></div>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-success" id="downloadQrButton">
+                    <i class="bi bi-download"></i> Descargar QR
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <!-- Bootstrap 5 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap Icons -->
@@ -142,7 +211,12 @@
     />
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- QR Code Library -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <!-- HTML2Canvas for image download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- JavaScript personalizado -->
     <script src="js/password-generator.js"></script>
+    <script src="js/qr_generator.js"></script>
   </body>
 </html>
