@@ -26,7 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
         icon: "warning",
         title: "Campo requerido",
         text: "Por favor ingresa el texto o URL para generar el código QR.",
-        confirmButtonText: "Entendido",
+        position: "top-end",
+        toast: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
       return;
     }
@@ -63,8 +67,11 @@ document.addEventListener("DOMContentLoaded", function () {
         icon: "success",
         title: "¡Código QR generado!",
         text: "Tu código QR ha sido creado exitosamente.",
-        timer: 2000,
+        position: "top-end",
+        toast: true,
         showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
     } catch (error) {
       console.error("Error generando QR:", error);
@@ -72,7 +79,11 @@ document.addEventListener("DOMContentLoaded", function () {
         icon: "error",
         title: "Error",
         text: "Hubo un problema al generar el código QR. Inténtalo de nuevo.",
-        confirmButtonText: "Reintentar",
+        position: "top-end",
+        toast: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
     }
   }
@@ -84,7 +95,11 @@ document.addEventListener("DOMContentLoaded", function () {
         icon: "warning",
         title: "No hay código QR",
         text: "Primero genera un código QR antes de descargarlo.",
-        confirmButtonText: "Entendido",
+        position: "top-end",
+        toast: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
       });
       return;
     }
@@ -121,8 +136,11 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "success",
           title: "¡Descarga iniciada!",
           text: "El código QR se ha descargado como imagen PNG.",
-          timer: 2000,
+          position: "top-end",
+          toast: true,
           showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
         });
       })
       .catch((error) => {
@@ -131,7 +149,11 @@ document.addEventListener("DOMContentLoaded", function () {
           icon: "error",
           title: "Error en descarga",
           text: "No se pudo descargar la imagen. Inténtalo de nuevo.",
-          confirmButtonText: "Reintentar",
+          position: "top-end",
+          toast: true,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
         });
       });
   });
