@@ -112,7 +112,7 @@
     <!-- Tabs Navigation -->
     <div class="flex border-b border-slate-700/50 overflow-x-auto">
       <button onclick="switchTab('password')" id="tab-password"
-        class="flex-1 min-w-[120px] py-4 text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-active">
+        class="flex-1 min-w-[100px] py-4 text-xs md:text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-active">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
@@ -120,20 +120,28 @@
         Password
       </button>
       <button onclick="switchTab('qr')" id="tab-qr"
-        class="flex-1 min-w-[120px] py-4 text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-inactive">
+        class="flex-1 min-w-[100px] py-4 text-xs md:text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-inactive">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 4v1m6 11h2m-6 0h-2v4h2v-4zM5 8h2v4H5V8zm14 0h2v4h-2V8zm-6 0h2v4h-2V8zm-6 4h2v4H5v-4z" />
         </svg>
-        QR Code
+        QR
       </button>
       <button onclick="switchTab('xml')" id="tab-xml"
-        class="flex-1 min-w-[120px] py-4 text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-inactive">
+        class="flex-1 min-w-[100px] py-4 text-xs md:text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-inactive">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
-        XML ⇄ Base64
+        XML
+      </button>
+      <button onclick="switchTab('pdf')" id="tab-pdf"
+        class="flex-1 min-w-[100px] py-4 text-xs md:text-sm font-semibold transition-all duration-200 flex items-center justify-center gap-2 tab-inactive">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+        PDF
       </button>
     </div>
 
@@ -384,6 +392,102 @@
 
       </div>
 
+      <!-- PDF / Base64 Section -->
+      <div id="pdf-section" class="hidden space-y-6">
+
+        <!-- Sub Tabs -->
+        <div class="flex p-1 bg-slate-800 rounded-xl mb-6">
+          <button onclick="switchPdfTab('pdf2b64')" id="subtab-pdf-b64"
+            class="flex-1 py-2 rounded-lg text-sm font-medium transition-all bg-primary-600 text-white shadow-sm">
+            PDF → Base64
+          </button>
+          <button onclick="switchPdfTab('b642pdf')" id="subtab-b64-pdf"
+            class="flex-1 py-2 rounded-lg text-sm font-medium transition-all bg-slate-700 text-slate-300 hover:text-white">
+            Base64 → PDF
+          </button>
+        </div>
+
+        <!-- PDF to Base64 Form -->
+        <div id="form-pdf-b64" class="space-y-6">
+          <div class="w-full">
+            <label class="block text-sm font-medium text-slate-400 mb-2">Sube tu archivo PDF</label>
+            <div class="flex items-center justify-center w-full">
+              <label id="pdfFileDropZone"
+                class="flex flex-col items-center justify-center w-full h-40 border-2 border-slate-600 border-dashed rounded-xl cursor-pointer bg-slate-800/50 hover:bg-slate-700/50 hover:border-primary-500 hover:text-primary-500 transition-all">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg class="w-10 h-10 mb-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                    </path>
+                  </svg>
+                  <p class="mb-2 text-sm text-slate-300"><span class="font-semibold">Haz clic para subir</span> o
+                    arrastra aquí</p>
+                  <p class="text-xs text-slate-500">Archivos PDF (*.pdf)</p>
+                  <p id="pdfFileName" class="mt-2 text-sm text-primary-400 font-semibold hidden"></p>
+                </div>
+                <input id="pdfFileInput" type="file" accept=".pdf,application/pdf" class="hidden" />
+              </label>
+            </div>
+          </div>
+
+          <button id="btnPdfToBase64"
+            class="w-full py-4 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold rounded-xl shadow-lg shadow-red-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+            Convertir a Base64
+          </button>
+        </div>
+
+        <!-- Base64 to PDF Form -->
+        <div id="form-b64-pdf" class="space-y-6 hidden">
+          <div>
+            <label class="block text-sm font-medium text-slate-400 mb-2">Pega el contenido Base64</label>
+            <textarea id="pdfBase64Input" rows="6"
+              class="w-full bg-slate-800/50 border border-slate-700 text-white rounded-xl p-4 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all resize-none"
+              placeholder="Pegar cadena Base64 del PDF aquí..."></textarea>
+          </div>
+          <button id="btnBase64ToPdf"
+            class="w-full py-4 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold rounded-xl shadow-lg shadow-red-500/25 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+            Visualizar PDF
+          </button>
+        </div>
+
+        <!-- Result Area -->
+        <div id="pdfResultArea" class="hidden pt-6 border-t border-slate-700/50 animate-fade-in">
+          <div class="flex items-center justify-between mb-3">
+            <h3 id="pdfResultTitle" class="text-lg font-semibold text-white">Resultado</h3>
+            <div class="flex gap-2">
+              <button id="btnCopyPdfResult"
+                class="px-3 py-1.5 text-xs font-medium bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                  </path>
+                </svg>
+                Copiar Base64
+              </button>
+              <button id="btnDownloadPdfResult"
+                class="px-3 py-1.5 text-xs font-medium bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                Descargar
+              </button>
+            </div>
+          </div>
+
+          <!-- Contenedor para Texto Base64 -->
+          <textarea id="pdfResultContent" readonly
+            class="w-full h-40 p-4 bg-slate-900 border border-slate-700 rounded-xl text-slate-300 font-mono text-xs resize-none focus:outline-none hidden"></textarea>
+
+          <!-- Contenedor para Visualización PDF -->
+          <div id="pdfPreviewContainer"
+            class="w-full min-h-[400px] bg-slate-900 border border-slate-700 rounded-xl hidden flex items-center justify-center p-2">
+            <!-- Embed generado dinámicamente -->
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
@@ -400,7 +504,7 @@
   <!-- Tab Switching Logic -->
   <script>
     function switchTab(tab) {
-      const sections = ['password', 'qr', 'xml'];
+      const sections = ['password', 'qr', 'xml', 'pdf'];
 
       sections.forEach(s => {
         const sectionEl = document.getElementById(s + '-section');
@@ -423,6 +527,7 @@
   <script src="js/password-generator.js"></script>
   <script src="js/qr_generator.js"></script>
   <script src="js/xml-converter.js"></script>
+  <script src="js/pdf-converter.js"></script>
 </body>
 
 </html>
