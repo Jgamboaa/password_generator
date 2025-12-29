@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let qrCodeInstance = null;
 
-  // Actualizar valor del tamaño del QR
+  // Actualizar valor visual del slider
   qrSizeSlider.addEventListener("input", function () {
     qrSizeValue.textContent = this.value;
   });
 
-  // Generar código QR
+  // Generar QR
   qrForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -22,29 +22,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const size = parseInt(qrSizeSlider.value);
 
     if (!text) {
-      Swal.fire({
-        icon: "warning",
-        title: "Campo requerido",
-        text: "Por favor ingresa el texto o URL para generar el código QR.",
-        position: "top-end",
-        toast: true,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+      ToastifyUtils.warning("Campo vacío", "Ingresa texto o URL para el QR");
       return;
     }
 
     generateQR(text, size);
   });
 
-  // Función para generar el código QR
   function generateQR(text, size) {
     try {
-      // Limpiar QR anterior
       qrCodeDiv.innerHTML = "";
+      
+      // Ajuste visual: el contenedor del QR debe adaptarse
+      qrCodeDiv.style.width = size + "px";
+      qrCodeDiv.style.height = size + "px";
+      qrCodeDiv.style.margin = "0 auto";
 
-      // Crear nuevo código QR
       qrCodeInstance = new QRCode(qrCodeDiv, {
         text: text,
         width: size,
@@ -54,107 +47,76 @@ document.addEventListener("DOMContentLoaded", function () {
         correctLevel: QRCode.CorrectLevel.H,
       });
 
-      // Mostrar resultado
-      qrResult.style.display = "block";
+      // Mostrar sección de resultado con animación
+      qrResult.classList.remove("hidden");
+      
+      // Scroll suave
+      setTimeout(() => {
+        qrResult.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 100);
 
-      // Scroll suave hacia el resultado
-      qrResult.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
+      ToastifyUtils.success("¡Listo!", "Código QR generado correctamente");
 
-      Swal.fire({
-        icon: "success",
-        title: "¡Código QR generado!",
-        text: "Tu código QR ha sido creado exitosamente.",
-        position: "top-end",
-        toast: true,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
     } catch (error) {
-      console.error("Error generando QR:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Hubo un problema al generar el código QR. Inténtalo de nuevo.",
-        position: "top-end",
-        toast: true,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+      console.error(error);
+      ToastifyUtils.error("Error", "No se pudo generar el QR");
     }
   }
 
-  // Descargar código QR como imagen
+  // Descargar QR
   downloadButton.addEventListener("click", function () {
-    if (!qrCodeInstance) {
-      Swal.fire({
-        icon: "warning",
-        title: "No hay código QR",
-        text: "Primero genera un código QR antes de descargarlo.",
-        position: "top-end",
-        toast: true,
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-      });
+    if (!qrCodeDiv.querySelector("img") && !qrCodeDiv.querySelector("canvas")) {
+      ToastifyUtils.warning("Atención", "Genera un QR primero");
       return;
     }
 
-    // Mostrar loading
-    Swal.fire({
-      title: "Preparando descarga...",
-      text: "Generando imagen del código QR",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
+    // Notificación de proceso
+    const loadingToast = ToastifyUtils.show({
+      variant: "loading",
+      title: "Procesando...",
+      message: "Generando imagen de alta calidad",
+      toastify: { duration: 0 } // No cerrar automáticamente hasta que terminemos
     });
 
-    // Usar html2canvas para capturar el QR
-    html2canvas(qrCodeDiv, {
-      backgroundColor: "#ffffff",
-      scale: 2, // Mejor calidad
-      useCORS: true,
-    })
+    // Pequeño delay para permitir que el UI se actualice
+    setTimeout(() => {
+      // El div que contiene el QR (puede ser canvas o img generado por la librería)
+      // La librería qrcodejs a veces genera un canvas y luego lo oculta para poner img, o viceversa.
+      // html2canvas funciona bien sobre el contenedor.
+      
+      // Aseguramos fondo blanco para la descarga
+      const originalBg = qrCodeDiv.style.backgroundColor;
+      qrCodeDiv.style.backgroundColor = "white"; 
+      qrCodeDiv.style.padding = "20px"; // Margen blanco alrededor
+
+      html2canvas(qrCodeDiv, {
+        backgroundColor: "#ffffff",
+        scale: 2, // Alta resolución
+        useCORS: true,
+        logging: false
+      })
       .then((canvas) => {
-        // Crear enlace de descarga
         const link = document.createElement("a");
         link.download = `qr-code-${Date.now()}.png`;
         link.href = canvas.toDataURL("image/png");
-
-        // Simular click para descargar
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
 
-        // Cerrar loading y mostrar éxito
-        Swal.fire({
-          icon: "success",
-          title: "¡Descarga iniciada!",
-          text: "El código QR se ha descargado como imagen PNG.",
-          position: "top-end",
-          toast: true,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
+        // Limpiar toast de carga y mostrar éxito
+        loadingToast.dismiss();
+        ToastifyUtils.success("Descarga iniciada", "Imagen guardada como PNG");
       })
       .catch((error) => {
-        console.error("Error en descarga:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error en descarga",
-          text: "No se pudo descargar la imagen. Inténtalo de nuevo.",
-          position: "top-end",
-          toast: true,
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-        });
+        console.error(error);
+        loadingToast.dismiss();
+        ToastifyUtils.error("Error", "Falló la descarga de la imagen");
+      })
+      .finally(() => {
+        // Restaurar estilos
+        qrCodeDiv.style.backgroundColor = originalBg;
+        qrCodeDiv.style.padding = "0";
       });
+    }, 500);
   });
 });
